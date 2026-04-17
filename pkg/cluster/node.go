@@ -15,7 +15,7 @@ import (
 	"github.com/cloudreve/Cloudreve/v4/pkg/cluster/routes"
 	"github.com/cloudreve/Cloudreve/v4/pkg/conf"
 	"github.com/cloudreve/Cloudreve/v4/pkg/downloader"
-	"github.com/cloudreve/Cloudreve/v4/pkg/downloader/aria2"
+	"github.com/cloudreve/Cloudreve/v4/pkg/downloader/a2client"
 	"github.com/cloudreve/Cloudreve/v4/pkg/downloader/qbittorrent"
 	"github.com/cloudreve/Cloudreve/v4/pkg/downloader/slave"
 	"github.com/cloudreve/Cloudreve/v4/pkg/filemanager/fs"
@@ -222,7 +222,7 @@ func NewDownloader(ctx context.Context, c request.Client, settings setting.Provi
 	if options.Provider == types.DownloaderProviderQBittorrent {
 		return qbittorrent.NewClient(logging.FromContext(ctx), c, settings, options.QBittorrentSetting)
 	} else if options.Provider == types.DownloaderProviderAria2 {
-		return aria2.New(logging.FromContext(ctx), settings, options.Aria2Setting), nil
+		return a2client.New(logging.FromContext(ctx), settings, options.Aria2Setting), nil
 	} else if options.Provider == "" {
 		return nil, errors.New("downloader not configured for this node")
 	} else {

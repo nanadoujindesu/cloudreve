@@ -1,4 +1,4 @@
-package aria2
+package a2client
 
 import (
 	"context"
@@ -13,7 +13,7 @@ import (
 
 	"github.com/cloudreve/Cloudreve/v4/inventory/types"
 	"github.com/cloudreve/Cloudreve/v4/pkg/downloader"
-	"github.com/cloudreve/Cloudreve/v4/pkg/downloader/aria2/rpc"
+	"github.com/cloudreve/Cloudreve/v4/pkg/downloader/a2client/rpc"
 	"github.com/cloudreve/Cloudreve/v4/pkg/logging"
 	"github.com/cloudreve/Cloudreve/v4/pkg/setting"
 	"github.com/cloudreve/Cloudreve/v4/pkg/util"
