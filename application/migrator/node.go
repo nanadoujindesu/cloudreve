@@ -31,31 +31,31 @@ func (m *Migrator) migrateNode() error {
 
 		cap := &boolset.BooleanSet{}
 		settings := &types.NodeSetting{
-			Provider: types.DownloaderProviderAria2,
+			Provider: types.DownloaderProviderA2Rpc,
 		}
 
-		if n.Aria2Enabled {
+		if n.A2RpcEnabled {
 			boolset.Sets(map[types.NodeCapability]bool{
 				types.NodeCapabilityRemoteDownload: true,
 			}, cap)
 
-			aria2Options := &model.Aria2Option{}
-			if err := json.Unmarshal([]byte(n.Aria2Options), aria2Options); err != nil {
-				return fmt.Errorf("failed to unmarshal aria2 options: %w", err)
+			a2rpcOptions := &model.A2RpcOption{}
+			if err := json.Unmarshal([]byte(n.A2RpcOptions), a2rpcOptions); err != nil {
+				return fmt.Errorf("failed to unmarshal a2 options: %w", err)
 			}
 
 			downloaderOptions := map[string]any{}
-			if aria2Options.Options != "" {
-				if err := json.Unmarshal([]byte(aria2Options.Options), &downloaderOptions); err != nil {
-					return fmt.Errorf("failed to unmarshal aria2 options: %w", err)
+			if a2rpcOptions.Options != "" {
+				if err := json.Unmarshal([]byte(a2rpcOptions.Options), &downloaderOptions); err != nil {
+					return fmt.Errorf("failed to unmarshal a2 options: %w", err)
 				}
 			}
 
-			settings.Aria2Setting = &types.Aria2Setting{
-				Server:   aria2Options.Server,
-				Token:    aria2Options.Token,
+			settings.A2RpcSetting = &types.A2RpcSetting{
+				Server:   a2rpcOptions.Server,
+				Token:    a2rpcOptions.Token,
 				Options:  downloaderOptions,
-				TempPath: aria2Options.TempPath,
+				TempPath: a2rpcOptions.TempPath,
 			}
 		}
 

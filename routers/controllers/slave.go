@@ -143,7 +143,7 @@ func SlaveDownloadTaskCreate(c *gin.Context) {
 	c.JSON(200, serializer.NewResponseWithGobData(c, handle))
 }
 
-// SlaveDownloadTaskStatus 查询从机 Aria2 任务状态
+// SlaveDownloadTaskStatus 查询从机 A2Rpc 任务状态
 func SlaveDownloadTaskStatus(c *gin.Context) {
 	service := ParametersFromContext[*slave.GetSlaveDownload](c, node.GetSlaveDownloadTaskParamCtx{})
 	d := c.MustGet(downloader.DownloaderCtxKey).(downloader.Downloader)

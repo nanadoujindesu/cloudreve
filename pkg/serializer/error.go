@@ -107,8 +107,8 @@ const (
 	CodePhoneRequired = 40010
 	// CodeBatchSourceSize 超出批量获取外链限制
 	CodeBatchSourceSize = 40014
-	// CodeBatchAria2Size 超出最大 Aria2 任务数量限制
-	CodeBatchAria2Size = 40015
+	// CodeBatchA2RpcSize 超出最大 A2Rpc 任务数量限制
+	CodeBatchA2RpcSize = 40015
 	// CodeParentNotExist 父目录不存在
 	CodeParentNotExist = 40016
 	// CodeUserBaned 用户不活跃

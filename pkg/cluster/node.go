@@ -221,8 +221,8 @@ func (b *masterNode) CreateDownloader(ctx context.Context, c request.Client, set
 func NewDownloader(ctx context.Context, c request.Client, settings setting.Provider, options *types.NodeSetting) (downloader.Downloader, error) {
 	if options.Provider == types.DownloaderProviderQBittorrent {
 		return qbittorrent.NewClient(logging.FromContext(ctx), c, settings, options.QBittorrentSetting)
-	} else if options.Provider == types.DownloaderProviderAria2 {
-		return a2client.New(logging.FromContext(ctx), settings, options.Aria2Setting), nil
+	} else if options.Provider == types.DownloaderProviderA2Rpc {
+		return a2client.New(logging.FromContext(ctx), settings, options.A2RpcSetting), nil
 	} else if options.Provider == "" {
 		return nil, errors.New("downloader not configured for this node")
 	} else {

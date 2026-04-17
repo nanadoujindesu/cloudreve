@@ -15,7 +15,7 @@ import (
 )
 
 type caller interface {
-	// Call sends a request of rpc to aria2 daemon
+	// Call sends a request of rpc to a2 daemon
 	Call(method string, params, reply interface{}) (err error)
 	Close() error
 }
@@ -100,17 +100,17 @@ func (h *httpCaller) setNotifier(ctx context.Context, u url.URL, notifer Notifie
 				return
 			}
 			switch request.Method {
-			case "aria2.onDownloadStart":
+			case rpcNS + ".onDownloadStart":
 				notifer.OnDownloadStart(request.Params)
-			case "aria2.onDownloadPause":
+			case rpcNS + ".onDownloadPause":
 				notifer.OnDownloadPause(request.Params)
-			case "aria2.onDownloadStop":
+			case rpcNS + ".onDownloadStop":
 				notifer.OnDownloadStop(request.Params)
-			case "aria2.onDownloadComplete":
+			case rpcNS + ".onDownloadComplete":
 				notifer.OnDownloadComplete(request.Params)
-			case "aria2.onDownloadError":
+			case rpcNS + ".onDownloadError":
 				notifer.OnDownloadError(request.Params)
-			case "aria2.onBtDownloadComplete":
+			case rpcNS + ".onBtDownloadComplete":
 				notifer.OnBtDownloadComplete(request.Params)
 			default:
 				log.Printf("unexpected notification: %s", request.Method)
@@ -178,17 +178,17 @@ func newWebsocketCaller(ctx context.Context, uri string, timeout time.Duration, 
 			if resp.Id == nil { // RPC notifications
 				if notifier != nil {
 					switch resp.Method {
-					case "aria2.onDownloadStart":
+					case rpcNS + ".onDownloadStart":
 						notifier.OnDownloadStart(resp.Params)
-					case "aria2.onDownloadPause":
+					case rpcNS + ".onDownloadPause":
 						notifier.OnDownloadPause(resp.Params)
-					case "aria2.onDownloadStop":
+					case rpcNS + ".onDownloadStop":
 						notifier.OnDownloadStop(resp.Params)
-					case "aria2.onDownloadComplete":
+					case rpcNS + ".onDownloadComplete":
 						notifier.OnDownloadComplete(resp.Params)
-					case "aria2.onDownloadError":
+					case rpcNS + ".onDownloadError":
 						notifier.OnDownloadError(resp.Params)
-					case "aria2.onBtDownloadComplete":
+					case rpcNS + ".onBtDownloadComplete":
 						notifier.OnBtDownloadComplete(resp.Params)
 					default:
 						log.Printf("unexpected notification: %s", resp.Method)

@@ -22,20 +22,20 @@ import (
 )
 
 const (
-	Aria2TempFolder        = "aria2"
+	A2RpcTempFolder        = "a2"
 	deleteTempFileDuration = 120 * time.Second
 )
 
-type aria2Client struct {
+type a2rpcClient struct {
 	l        logging.Logger
 	settings setting.Provider
 
-	options *types.Aria2Setting
+	options *types.A2RpcSetting
 	timeout time.Duration
 	caller  rpc.Client
 }
 
-func New(l logging.Logger, settings setting.Provider, options *types.Aria2Setting) downloader.Downloader {
+func New(l logging.Logger, settings setting.Provider, options *types.A2RpcSetting) downloader.Downloader {
 	rpcServer := options.Server
 	rpcUrl, err := url.Parse(options.Server)
 	if err == nil {
@@ -45,7 +45,7 @@ func New(l logging.Logger, settings setting.Provider, options *types.Aria2Settin
 	}
 
 	options.Server = rpcServer
-	return &aria2Client{
+	return &a2rpcClient{
 		l:        l,
 		settings: settings,
 		options:  options,
@@ -53,7 +53,7 @@ func New(l logging.Logger, settings setting.Provider, options *types.Aria2Settin
 	}
 }
 
-func (a *aria2Client) CreateTask(ctx context.Context, url string, options map[string]interface{}) (*downloader.TaskHandle, error) {
+func (a *a2rpcClient) CreateTask(ctx context.Context, url string, options map[string]interface{}) (*downloader.TaskHandle, error) {
 	caller := a.caller
 	if caller == nil {
 		var err error
@@ -64,7 +64,7 @@ func (a *aria2Client) CreateTask(ctx context.Context, url string, options map[st
 	}
 
 	path := a.tempPath(ctx)
-	a.l.Info("Creating aria2 task with url %q saving to %q...", url, path)
+	a.l.Info("Creating a2 task with url %q saving to %q...", url, path)
 
 	// Create the download task options
 	downloadOptions := map[string]interface{}{}
@@ -87,7 +87,7 @@ func (a *aria2Client) CreateTask(ctx context.Context, url string, options map[st
 	}, nil
 }
 
-func (a *aria2Client) Info(ctx context.Context, handle *downloader.TaskHandle) (*downloader.TaskStatus, error) {
+func (a *a2rpcClient) Info(ctx context.Context, handle *downloader.TaskHandle) (*downloader.TaskStatus, error) {
 	caller := a.caller
 	if caller == nil {
 		var err error
@@ -99,7 +99,7 @@ func (a *aria2Client) Info(ctx context.Context, handle *downloader.TaskHandle) (
 
 	status, err := caller.TellStatus(handle.ID)
 	if err != nil {
-		return nil, fmt.Errorf("aria2 rpc error: %w", err)
+		return nil, fmt.Errorf("a2 rpc error: %w", err)
 	}
 
 	state := downloader.StatusDownloading
@@ -186,7 +186,7 @@ func (a *aria2Client) Info(ctx context.Context, handle *downloader.TaskHandle) (
 	return res, nil
 }
 
-func (a *aria2Client) Cancel(ctx context.Context, handle *downloader.TaskHandle) error {
+func (a *a2rpcClient) Cancel(ctx context.Context, handle *downloader.TaskHandle) error {
 	caller := a.caller
 	if caller == nil {
 		var err error
@@ -201,7 +201,7 @@ func (a *aria2Client) Cancel(ctx context.Context, handle *downloader.TaskHandle)
 		return fmt.Errorf("cannot get task: %w", err)
 	}
 
-	// Delay to delete temp download folder to avoid being locked by aria2
+	// Delay to delete temp download folder to avoid being locked by a2
 	defer func() {
 		go func(parent string, l logging.Logger) {
 			time.Sleep(deleteTempFileDuration)
@@ -213,13 +213,13 @@ func (a *aria2Client) Cancel(ctx context.Context, handle *downloader.TaskHandle)
 	}()
 
 	if _, err := caller.Remove(handle.ID); err != nil {
-		return fmt.Errorf("aria2 rpc error: %w", err)
+		return fmt.Errorf("a2 rpc error: %w", err)
 	}
 
 	return nil
 }
 
-func (a *aria2Client) SetFilesToDownload(ctx context.Context, handle *downloader.TaskHandle, args ...*downloader.SetFileToDownloadArgs) error {
+func (a *a2rpcClient) SetFilesToDownload(ctx context.Context, handle *downloader.TaskHandle, args ...*downloader.SetFileToDownloadArgs) error {
 	caller := a.caller
 	if caller == nil {
 		var err error
@@ -256,7 +256,7 @@ func (a *aria2Client) SetFilesToDownload(ctx context.Context, handle *downloader
 	return err
 }
 
-func (a *aria2Client) Test(ctx context.Context) (string, error) {
+func (a *a2rpcClient) Test(ctx context.Context) (string, error) {
 	caller := a.caller
 	if caller == nil {
 		var err error
@@ -268,13 +268,13 @@ func (a *aria2Client) Test(ctx context.Context) (string, error) {
 
 	version, err := caller.GetVersion()
 	if err != nil {
-		return "", fmt.Errorf("cannot call aria2: %w", err)
+		return "", fmt.Errorf("cannot call a2: %w", err)
 	}
 
 	return version.Version, nil
 }
 
-func (a *aria2Client) tempPath(ctx context.Context) string {
+func (a *a2rpcClient) tempPath(ctx context.Context) string {
 	guid, _ := uuid.NewV4()
 
 	// Generate a unique path for the task
@@ -284,7 +284,7 @@ func (a *aria2Client) tempPath(ctx context.Context) string {
 	}
 	path := filepath.Join(
 		base,
-		Aria2TempFolder,
+		A2RpcTempFolder,
 		guid.String(),
 	)
 	return path

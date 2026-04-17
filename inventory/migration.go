@@ -164,7 +164,7 @@ func migrateAdminGroup(l logging.Logger, client *ent.Client, ctx context.Context
 		SetPermissions(permissions).
 		SetSettings(&types.GroupSetting{
 			SourceBatchSize:  1000,
-			Aria2BatchSize:   50,
+			A2RpcBatchSize:   50,
 			MaxWalkedFiles:   100000,
 			TrashRetention:   7 * 24 * 3600,
 			RedirectedSource: true,
@@ -196,7 +196,7 @@ func migrateUserGroup(l logging.Logger, client *ent.Client, ctx context.Context)
 		SetPermissions(permissions).
 		SetSettings(&types.GroupSetting{
 			SourceBatchSize:  10,
-			Aria2BatchSize:   1,
+			A2RpcBatchSize:   1,
 			MaxWalkedFiles:   100000,
 			TrashRetention:   7 * 24 * 3600,
 			RedirectedSource: true,
@@ -252,16 +252,16 @@ func migrateMasterNode(l logging.Logger, client *ent.Client, ctx context.Context
 		SetCapabilities(capabilities).
 		SetName("Master").
 		SetSettings(&types.NodeSetting{
-			Provider: types.DownloaderProviderAria2,
+			Provider: types.DownloaderProviderA2Rpc,
 		}).
 		SetStatus(node.StatusActive)
 
-	_, enableAria2 := os.LookupEnv(EnvEnableAria2)
-	if enableAria2 {
-		l.Info("Aria2 is override as enabled.")
+	_, enableA2Rpc := os.LookupEnv(EnvEnableA2Rpc)
+	if enableA2Rpc {
+		l.Info("A2Rpc is override as enabled.")
 		stm.SetSettings(&types.NodeSetting{
-			Provider: types.DownloaderProviderAria2,
-			Aria2Setting: &types.Aria2Setting{
+			Provider: types.DownloaderProviderA2Rpc,
+			A2RpcSetting: &types.A2RpcSetting{
 				Server: "http://127.0.0.1:6800/jsonrpc",
 			},
 		})

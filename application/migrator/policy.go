@@ -159,7 +159,7 @@ func (m *Migrator) migratePolicy() (map[int]bool, error) {
 				SetType(node.TypeSlave).
 				SetCapabilities(bs).
 				SetSettings(&types.NodeSetting{
-					Provider: types.DownloaderProviderAria2,
+					Provider: types.DownloaderProviderA2Rpc,
 				}).
 				Save(context.Background())
 			if err != nil {

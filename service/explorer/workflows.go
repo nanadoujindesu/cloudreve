@@ -111,9 +111,9 @@ func (service *DownloadWorkflowService) CreateDownloadTask(c *gin.Context) ([]*T
 	}
 
 	// 检查批量任务数量
-	limit := user.Edges.Group.Settings.Aria2BatchSize
+	limit := user.Edges.Group.Settings.A2RpcBatchSize
 	if limit > 0 && len(service.Src) > limit {
-		return nil, serializer.NewError(serializer.CodeBatchAria2Size, "", nil)
+		return nil, serializer.NewError(serializer.CodeBatchA2RpcSize, "", nil)
 	}
 
 	// Validate src file

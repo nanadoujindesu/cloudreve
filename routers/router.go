@@ -125,8 +125,8 @@ func initSlaveRouter(dep dependency.Dep) *gin.Engine {
 			controllers.FromJSON[adminsvc.SlavePingService](adminsvc.SlavePingParameterCtx{}),
 			controllers.SlavePing,
 		)
-		// // 测试 Aria2 RPC 连接
-		// v4.POST("ping/aria2", controllers.AdminTestAria2)
+		// // 测试 A2Rpc RPC 连接
+		// v4.POST("ping/a2", controllers.AdminTestA2Rpc)
 		initSlaveFileRouter(v4)
 
 		// 离线下载

@@ -32,7 +32,7 @@ type (
 		DecompressSize        int64                  `json:"decompress_size,omitempty"`
 		RemoteDownloadOptions map[string]interface{} `json:"remote_download_options,omitempty"` // 离线下载用户组配置
 		SourceBatchSize       int                    `json:"source_batch,omitempty"`
-		Aria2BatchSize        int                    `json:"aria2_batch,omitempty"`
+		A2RpcBatchSize        int                    `json:"a2_batch,omitempty"`
 		MaxWalkedFiles        int                    `json:"max_walked_files,omitempty"`
 		TrashRetention        int                    `json:"trash_retention,omitempty"`
 		RedirectedSource      bool                   `json:"redirected_source,omitempty"`
@@ -117,7 +117,7 @@ type (
 	NodeSetting struct {
 		Provider            DownloaderProvider `json:"provider,omitempty"`
 		*QBittorrentSetting `json:"qbittorrent,omitempty"`
-		*Aria2Setting       `json:"aria2,omitempty"`
+		*A2RpcSetting       `json:"a2,omitempty"`
 		// 下载监控间隔
 		Interval       int  `json:"interval,omitempty"`
 		WaitForSeeding bool `json:"wait_for_seeding,omitempty"`
@@ -133,7 +133,7 @@ type (
 		TempPath string         `json:"temp_path,omitempty"`
 	}
 
-	Aria2Setting struct {
+	A2RpcSetting struct {
 		Server   string         `json:"server,omitempty"`
 		Token    string         `json:"token,omitempty"`
 		Options  map[string]any `json:"options,omitempty"`
@@ -292,7 +292,7 @@ const (
 )
 
 const (
-	DownloaderProviderAria2       = DownloaderProvider("aria2")
+	DownloaderProviderA2Rpc       = DownloaderProvider("a2")
 	DownloaderProviderQBittorrent = DownloaderProvider("qbittorrent")
 )
 

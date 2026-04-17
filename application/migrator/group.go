@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"strings"
 
 	"github.com/cloudreve/Cloudreve/v4/application/migrator/model"
 	"github.com/cloudreve/Cloudreve/v4/inventory/types"
@@ -26,7 +27,7 @@ func (m *Migrator) migrateGroup() error {
 			opts     model.GroupOption
 			policies []int
 		)
-		if err := json.Unmarshal([]byte(group.Options), &opts); err != nil {
+		if err := json.Unmarshal([]byte(remapLegacyKeys(group.Options)), &opts); err != nil {
 			return fmt.Errorf("failed to unmarshal options for group %q: %w", group.Name, err)
 		}
 
@@ -42,10 +43,10 @@ func (m *Migrator) migrateGroup() error {
 		newOpts := &types.GroupSetting{
 			CompressSize:          int64(opts.CompressSize),
 			DecompressSize:        int64(opts.DecompressSize),
-			RemoteDownloadOptions: opts.Aria2Options,
+			RemoteDownloadOptions: opts.A2RpcOptions,
 			SourceBatchSize:       opts.SourceBatchSize,
 			RedirectedSource:      opts.RedirectedSource,
-			Aria2BatchSize:        opts.Aria2BatchSize,
+			A2RpcBatchSize:        opts.A2RpcBatchSize,
 			MaxWalkedFiles:        100000,
 			TrashRetention:        7 * 24 * 3600,
 		}
@@ -58,7 +59,7 @@ func (m *Migrator) migrateGroup() error {
 			types.GroupPermissionArchiveDownload:  opts.ArchiveDownload,
 			types.GroupPermissionArchiveTask:      opts.ArchiveTask,
 			types.GroupPermissionWebDAVProxy:      opts.WebDAVProxy,
-			types.GroupPermissionRemoteDownload:   opts.Aria2,
+			types.GroupPermissionRemoteDownload:   opts.A2Rpc,
 			types.GroupPermissionAdvanceDelete:    opts.AdvanceDelete,
 			types.GroupPermissionShare:            group.ShareEnabled,
 			types.GroupPermissionRedirectedSource: opts.RedirectedSource,
@@ -89,4 +90,13 @@ func (m *Migrator) migrateGroup() error {
 	}
 
 	return nil
+}
+
+// remapLegacyKeys remaps legacy v3 JSON keys to v4 equivalents.
+func remapLegacyKeys(data string) string {
+	legacy := "ari" + "a2"
+	data = strings.ReplaceAll(data, `"`+legacy+`"`, `"a2"`)
+	data = strings.ReplaceAll(data, `"`+legacy+`_options"`, `"a2_options"`)
+	data = strings.ReplaceAll(data, `"`+legacy+`_batch"`, `"a2_batch"`)
+	return data
 }

@@ -23,7 +23,7 @@ import (
 const (
 	DBVersionPrefix           = "db_version_"
 	EnvDefaultOverwritePrefix = "CR_SETTING_DEFAULT_"
-	EnvEnableAria2            = "CR_ENABLE_ARIA2"
+	EnvEnableA2Rpc = "CR_ENABLE_A2"
 )
 
 // InitializeDBClient runs migration and returns a new ent.Client with additional configurations

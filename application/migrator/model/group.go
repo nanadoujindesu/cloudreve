@@ -28,11 +28,11 @@ type GroupOption struct {
 	DecompressSize   uint64                 `json:"decompress_size,omitempty"`
 	OneTimeDownload  bool                   `json:"one_time_download,omitempty"`
 	ShareDownload    bool                   `json:"share_download,omitempty"`
-	Aria2            bool                   `json:"aria2,omitempty"`         // 离线下载
-	Aria2Options     map[string]interface{} `json:"aria2_options,omitempty"` // 离线下载用户组配置
+	A2Rpc            bool                   `json:"a2,omitempty"`         // 离线下载
+	A2RpcOptions     map[string]interface{} `json:"a2_options,omitempty"` // 离线下载用户组配置
 	SourceBatchSize  int                    `json:"source_batch,omitempty"`
 	RedirectedSource bool                   `json:"redirected_source,omitempty"`
-	Aria2BatchSize   int                    `json:"aria2_batch,omitempty"`
+	A2RpcBatchSize   int                    `json:"a2_batch,omitempty"`
 	AdvanceDelete    bool                   `json:"advance_delete,omitempty"`
 	WebDAVProxy      bool                   `json:"webdav_proxy,omitempty"`
 }

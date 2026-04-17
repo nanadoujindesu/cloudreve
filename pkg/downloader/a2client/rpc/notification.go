@@ -18,7 +18,7 @@ type websocketResponse struct {
 	Params []Event `json:"params"`
 }
 
-// Notifier handles rpc notification from aria2 server
+// Notifier handles rpc notification from a2 server
 type Notifier interface {
 	// OnDownloadStart will be sent when a download is started.
 	OnDownloadStart([]Event)
