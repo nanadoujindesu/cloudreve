@@ -19,7 +19,5 @@ RUN chmod +x ./cloudreve
 
 EXPOSE 5212 443
 
-VOLUME ["/cloudreve/data"]
-
 ENTRYPOINT ["./cloudreve"]
 
